@@ -53,9 +53,7 @@ data:
 
     redis-server /conf/redis.conf &
     # Discover peers
-    wget https://storage.googleapis.com/kubernetes-release/pets/peer-finder -O /bin/peer-finder
-    chmod u+x /bin/peer-finder
-    peer-finder -on-start 'tee > /conf/initial_peers' -service redis-cluster -ns $POD_NAMESPACE
+    peer-finder -on-start 'tee > /tmp/initial_peers' -service redis-cluster -ns $POD_NAMESPACE
 
     # TODO: Wait until redis-server process is ready
     sleep 1
@@ -101,7 +99,7 @@ spec:
       #hostNetwork: true
       containers:
       - name: redis-cluster
-        image: redis:3.2.1
+        image: yuimai/redis-cluster-raspi:0.2
         ports:
         - containerPort: 6379
           name: client
